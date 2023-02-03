@@ -2,7 +2,14 @@
 
 {% block content %}
 <p>A Mountain Of Only New Greats - United States</p>
-<input type="file" accept="image/*" />
+
+<form>
+    <label for="photo">Enter Photo</label>
+    <input type="file" name="photo" accept="image/*" />
+    
+    <button type="submit">Submit</button>
+</form>
+
 <!-- 
 <button id="start-camera">Start Camera</button>
 <video id="video" width="320" height="240" autoplay></video>
