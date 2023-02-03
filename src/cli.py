@@ -13,10 +13,12 @@ def create_db():
 @click.command(name="printdb")
 @with_appcontext
 def print_db():
-    users = Tournament.query.all()
+    tournament = Tournament.query.all()
 
-    for user in users:
-        print(user.id, user.name)
+    for tourn in tournament:
+        print(tourn.id, tourn.name)
+        for user in tourn.competitors:
+            print("\t", user.id, user.name)
 
 @click.command(name="addcompetitor")
 @click.argument("name")
@@ -27,6 +29,15 @@ def add_comp(name):
     db.session.commit()
     print("Competitor added")
 
+@click.command(name="addtournament")
+@click.argument("name")
+@with_appcontext
+def add_tournament(name):
+    tournament = Tournament(name=name)
+    db.session.add(tournament)
+    db.session.commit()
+    print("tournament added")
+
 @click.command(name="addctot")
 @click.argument("name")
 @click.argument("tournament")
@@ -36,7 +47,7 @@ def add_comp_to_tourn(name, tournament):
     tourn = Tournament.query.filter(Tournament.name == tournament).first()
     comp.tournaments.append(tourn)
     db.session.commit()
-    print("Competitor added")
+    print("Competitor added to tournament")
 
 @click.command(name="cleardb")
 @with_appcontext

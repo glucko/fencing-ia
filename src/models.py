@@ -13,6 +13,7 @@ association_table = db.Table(
 class Tournament(db.Model):
     __tablename__ = "tournament"
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=True)
     
 class Competitor(db.Model):
     __tablename__ = "competitor"
