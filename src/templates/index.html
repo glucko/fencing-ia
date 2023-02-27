@@ -10,6 +10,31 @@
     <button type="submit">Submit</button>
 </form>
 
+<form id="#fencer_entry" action="/manual_entry">
+    <h3>Manual Entry</h3>
+    
+    <div>
+        <label for="tournament_name">Tournament Name</label>
+        <input name="tournament_name" type="text">
+    </div>
+    
+    <div id="#fencer_template">
+        <label for="name1"l>Name</label>
+        <input name="name1" type="text">
+
+        <h4>If this is the fencer's first registration, please enter addition information. Otherwise, leave blank.</h4>
+
+        <label for="first_registration">First Registration?</label>
+        <input name="first_registration" type="checkbox">
+
+        <label for="email1">Email</label>
+        <input name="email1" type="email">
+    </div>
+    
+    <button type="button" id="add_fencer">Add Fencer</button>
+    <button type="submit">Submit</button>
+</form>
+
 <!-- 
 <button id="start-camera">Start Camera</button>
 <video id="video" width="320" height="240" autoplay></video>
@@ -34,5 +59,6 @@
         // data url of the image
         console.log(image_data_url);
     }); -->
-</script>
+<!-- </script> -->
+<script src="script.js"></script>
 {% endblock %}
