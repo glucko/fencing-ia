@@ -25,6 +25,13 @@ def hello_world():
     if request.method == 'POST':
         image = request.form['photo']
         print(image)
+
+@app.route('/manual_entry', methods=['POST'])
+def manual_fencer_entry():
+    for key, value in range(1, len(request.form), 2):
+        print(key, value)
+    
+    return 'ok'
     
 # run the app
 if __name__ == '__main__':
