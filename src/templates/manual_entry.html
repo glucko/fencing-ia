@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="/manual_entry">
+    {{ form.csrf_token }}
+    {{ form.name }}
+    {{ form.submit }}
+</form>
+
+{% if form.name.errors %}
+    <ul class="errors">
+    {% for error in form.name.errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}
