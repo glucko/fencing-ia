@@ -14,13 +14,17 @@ def create_db():
 @with_appcontext
 def print_db():
     tournament = Tournament.query.all()
+    fencers = Fencer.query.all()
 
     for tourn in tournament:
-        print(tourn.id, tourn.name)
-        for user in tourn.Fencers:
+        print("Tournament", tourn.id, tourn.name)
+        for user in tourn.fencers:
             print("\t", user.id, user.name)
+    
+    for fencer in fencers:
+        print("Fencer", fencer.id, fencer.name)
 
-@click.command(name="addFencer")
+@click.command(name="addfencer")
 @click.argument("name")
 @with_appcontext
 def add_fencer(name):
@@ -51,9 +55,7 @@ def add_fencer_to_tourn(name, tournament):
 
 @click.command(name="cleardb")
 @with_appcontext
-def clear_data(session):
-    meta = db.metadata
-    for table in reversed(meta.sorted_tables):
-        print('Clear table %s' % table)
-        session.execute(table.delete())
-    session.commit()
+def clear_db():
+    db.drop_all()
+    db.session.commit()
+    print("Database tables cleared, remember to recreate them!")

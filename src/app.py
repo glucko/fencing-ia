@@ -2,19 +2,19 @@ from flask import Flask, render_template
 from models import db
 from forms import forms
 from display import display_blueprint
-from cli import create_db, print_db, add_fencer, add_fencer_to_tourn, add_tournament
+from cli import create_db, clear_db, print_db, add_fencer, add_fencer_to_tourn, add_tournament
 import os
 
-file_path = os.path.abspath(os.getcwd())+"/tmp/test.db"
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'asdfasdfwerqewgfgzvzxc'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///"+os.path.join(basedir, "tmp", "data.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.cli.add_command(print_db)
 app.cli.add_command(create_db)
-app.cli.add_command(create_db)
+app.cli.add_command(clear_db)
 app.cli.add_command(add_fencer)
 app.cli.add_command(add_fencer_to_tourn)
 app.cli.add_command(add_tournament)
