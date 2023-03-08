@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="/fencer_registration">
+    {{ form.hidden_tag() }}
+
+    {% for field in form %}
+        {% if field.type != "CSRFTokenField"%}
+            {{ field.label }}
+            {{ field }}
+        {% endif %}
+    {% endfor %}
+    <input type="submit">
+</form>
+
+{% for field in form %}
+    {% if field.errors %}
+        <ul class="errors">
+        {% for error in field.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

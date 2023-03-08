@@ -1,6 +1,6 @@
 import click
 from flask.cli import with_appcontext
-from models import Tournament, Competitor, db
+from models import Tournament, Fencer, db
 
 
 @click.command(name="createdb")
@@ -17,17 +17,17 @@ def print_db():
 
     for tourn in tournament:
         print(tourn.id, tourn.name)
-        for user in tourn.competitors:
+        for user in tourn.Fencers:
             print("\t", user.id, user.name)
 
-@click.command(name="addcompetitor")
+@click.command(name="addFencer")
 @click.argument("name")
 @with_appcontext
-def add_comp(name):
-    competitor = Competitor(name=name)
-    db.session.add(competitor)
+def add_fencer(name):
+    fencer = Fencer(name=name)
+    db.session.add(fencer)
     db.session.commit()
-    print("Competitor added")
+    print("Fencer added")
 
 @click.command(name="addtournament")
 @click.argument("name")
@@ -38,16 +38,16 @@ def add_tournament(name):
     db.session.commit()
     print("tournament added")
 
-@click.command(name="addctot")
+@click.command(name="addftot")
 @click.argument("name")
 @click.argument("tournament")
 @with_appcontext
-def add_comp_to_tourn(name, tournament):
-    comp = Competitor.query.filter(Competitor.name == name).first()
+def add_fencer_to_tourn(name, tournament):
+    fencer = Fencer.query.filter(Fencer.name == name).first()
     tourn = Tournament.query.filter(Tournament.name == tournament).first()
-    comp.tournaments.append(tourn)
+    fencer.tournaments.append(tourn)
     db.session.commit()
-    print("Competitor added to tournament")
+    print("Fencer added to tournament")
 
 @click.command(name="cleardb")
 @with_appcontext

@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>FlaskApp</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+
+    <style>
+        nav {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        }
+
+        nav ul {
+        display: flex;
+        list-style: none;
+        }
+
+        nav li {
+        padding-left: 1rem;
+        }
+
+    </style>
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert"> {{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="{{ url_for('forms.manual_entry') }}">Manual Entry</a></li>
+            <li><a href="{{ url_for('forms.upload') }}">Photo Entry</a></li>
+            <li><a href="{{ url_for('forms.tournament_entry') }}">Tournament Display</a></li>
+            <li><a href="{{ url_for('forms.fencer_registration') }}">Fencer Registration</a></li>
+        </ul>
+    </nav>
     {% block content %} {% endblock %}
 </body>
 </html>

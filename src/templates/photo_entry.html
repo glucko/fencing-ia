@@ -3,6 +3,8 @@
 {% block content %}
 <form method="POST" action="/photo_entry" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
+
+    {{ form.label }}
     {{ form.image }}
     <input type="submit">
 </form>
