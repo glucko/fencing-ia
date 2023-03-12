@@ -18,7 +18,7 @@
                 <tr>
                     <th>{{ i[0].main_fencer_name }}</th>
                     {% for match in i %}
-                            {% if match.is_repeat %}
+                            {% if not match.is_different %}
                                 <td>sussy!</td>   
                             {% else %}
                                 <td>{{ match.score}}</td>

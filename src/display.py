@@ -15,7 +15,7 @@ class FencerForm(FlaskForm):
     opponent = IntegerField(widget=HiddenInput())
     main_fencer_name = StringField(widget=HiddenInput())
     score = StringField('Score', default="0")
-    is_repeat = BooleanField('is_repeat', widget=HiddenInput())
+    is_different = BooleanField('is_repeat', widget=HiddenInput())
 
 class TournamentForm(FlaskForm):
     name = StringField('name', widget=HiddenInput())
@@ -30,31 +30,26 @@ def display(tourn_id=None):
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
     pairs = []
+    x = 0
     for i in fencers:
         for j in fencers:
-            if frozenset([i,j]) in pairs:
-                fencer_form = FencerForm()
-                fencer_form.fencer1 = i.id
-                fencer_form.fencer2 = j.id
-                fencer_form.main_fencer_name = i.name
-                tournament_form.fencers.append_entry(fencer_form)
-                pairs.append(frozenset([i,j, None]))
+            x+= 1
+            fencer_form = FencerForm()
+            fencer_form.main_fencer = i.id
+            fencer_form.opponent = j.id
+            fencer_form.main_fencer_name = i.name
 
-            elif i.id != j.id:
-                fencer_form = FencerForm()
-                fencer_form.fencer1 = i.id
-                fencer_form.fencer2 = j.id
-                fencer_form.main_fencer_name = i.name
-                fencer_form.is_repeat = False
-                tournament_form.fencers.append_entry(fencer_form)
-                pairs.append(frozenset([i,j]))
-        tournament_form.fencers.append_entry(fencer_form)
+            if i.id == j.id:
+                fencer_form.is_different = False
+            tournament_form.fencers.append_entry(fencer_form)
+            pairs.append(frozenset([i,j]))
 
     chunks = []
-    chunk_len = len(fencers)-1
+    chunk_len = len(fencers)
     for i in range(0, len(pairs), chunk_len):
         chunks.append(tournament_form.fencers.data[i:i + chunk_len])
     
-    pp = PrettyPrinter()
+    pp = PrettyPrinter(compact=True, sort_dicts=False)
     pp.pprint(chunks)
+    print(len(chunks[0]))
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
