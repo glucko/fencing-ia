@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="/tournament_registration">
+    {{ form.hidden_tag() and form.csrf_token }}
+
+    {% for field in form %}
+        {% if field.type != 'CSRFTokenField'  %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <input type="submit">
+</form>
+
+{% for key in form.errors %}                                            
+    {% for error in form.errors[key] %}                                     
+        <span>{{ form[key].label.text }} Field Error </span>
+        <span style="color: red;">[{{ error }}]</span>                  
+    {% endfor %}                                                        
+{% endfor %}  
+
+{% endblock %}
