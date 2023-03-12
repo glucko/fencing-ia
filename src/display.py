@@ -14,6 +14,10 @@ class FencerForm(FlaskForm):
     opponent = IntegerField(widget=HiddenInput())
     main_fencer_name = StringField(widget=HiddenInput())
     score = StringField('Score')
+    v = IntegerField(widget=HiddenInput())
+    ts = IntegerField(widget=HiddenInput())
+    tr = IntegerField(widget=HiddenInput())
+    indicator = IntegerField(widget=HiddenInput())
     is_different = BooleanField('is_repeat', widget=HiddenInput())
 
 class TournamentForm(FlaskForm):
@@ -27,7 +31,8 @@ def display(tourn_id=None):
 
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
-    pairs = []
+    
+
     for i in fencers:
         for j in fencers:
             score = tournament.scores.filter_by(main_fencer_id=i.id, opponent_id=j.id).first()
@@ -42,14 +47,19 @@ def display(tourn_id=None):
             fencer_form.opponent = j.id
             fencer_form.main_fencer_name = i.name
 
+            other = other_information(i.id)
+            fencer_form.v = other[0]
+            fencer_form.ts = other[1]
+            fencer_form.tr = other[2]
+            fencer_form.indicator = other[3]
+
             if i.id == j.id:
                 fencer_form.is_different = False
             tournament_form.fencers.append_entry(fencer_form)
-            pairs.append(frozenset([i,j]))
 
     chunks = []
     chunk_len = len(fencers)
-    for i in range(0, len(pairs), chunk_len):
+    for i in range(0, len(tournament_form.fencers), chunk_len):
         chunks.append(tournament_form.fencers[i:i + chunk_len])
     
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
@@ -75,3 +85,28 @@ def update(tourn_id=None):
             score.score = i[2][1]
         db.session.commit()
     return redirect(url_for('display.display', tourn_id=tourn_id))
+
+def other_information(fencer_id):
+    fencer = Fencer.query.get(fencer_id)
+    touches_scored = Score.query.filter_by(main_fencer_id=fencer_id).all()
+    touches_received = Score.query.filter_by(opponent_id=fencer_id).all()
+    victory_count = 0
+    ts = 0
+    tr = 0
+
+    for i in touches_scored:
+        if 'V' in i.score:
+            victory_count += 1
+        if 'L' in i.score or 'V' in i.score:
+            ts += int(i.score[1:])
+        else:
+            ts += int(i.score)
+
+    for i in touches_received:
+        if 'L' in i.score or 'V' in i.score:
+            tr += int(i.score[1:])
+        else:
+            tr += int(i.score)
+    indicator = ts - tr
+    print(fencer.name, victory_count, ts, tr, indicator)
+    return (victory_count, ts, tr, indicator)

@@ -114,6 +114,6 @@ def tournament_registration():
             db.session.add(tournament)
             db.session.commit()
 
-            return url_for("display.display", tourn_id=tournament.id)
+            return redirect(url_for("display.display", tourn_id=tournament.id))
 
     return render_template('forms/tournament_registration.html', form=tournament_form)
