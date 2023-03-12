@@ -2,31 +2,32 @@
 
 {% block content %}
 <div>
-    <h1> {{ tournament.title }} </h1>
+    <h1> {{ tournament_form.name }} </h1>
     <form action="" method="post" name="teamform">
-        {{ tournament_form.hidden_tag() }}
-        Team Title: {{ teamform.title }}<br>
-        <div>
-            <table>
-                {# column adn row names #}
-                {% for i in range(2) %}
-                    <tr>
-                        {% for fencer in tournament.fencers %}
-                            <th>{{ fencer.name }}</th>
-                        {% endfor %}
-                    </tr>
+    {{ tournament_form.hidden_tag() }}
+        <table>
+            {# column names #}
+            <tr>
+                <th></th>
+                {% for chunk in chunks %}
+                    <th>{{ chunk[0].main_fencer_name }}</th>
                 {% endfor %}
+            </tr>
 
-                {% for i in range() %}
+            {% for i in chunks %}
                 <tr>
-                    <td>{{ member.name }}</td>
-                    <td>{{ member.member_id }}</td>
-                    <td>{{ member.inbox_share }}</td>
+                    <th>{{ i[0].main_fencer_name }}</th>
+                    {% for match in i %}
+                            {% if match.is_repeat %}
+                                <td>sussy!</td>   
+                            {% else %}
+                                <td>{{ match.score}}</td>
+                            {% endif %}
+                    {% endfor %}
                 </tr>
-                {% endfor %}
-            </table>
-        </div>
-        <p><input type="submit" name="edit" value="Send"></p>
+            {% endfor %}
+        </table>
+        <p><input type="submit" name="edit" value="Update"></p>
     </form>
 </div>
 {% endblock %}
