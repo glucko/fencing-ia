@@ -12,6 +12,7 @@
                 {% for chunk in chunks %}
                     <th>{{ chunk[0].main_fencer_name.data }}</th>
                 {% endfor %}
+                <th>Place</th>
                 <th>Victory Count</th>
                 <th>TS</th>
                 <th>TR</th>
@@ -32,6 +33,7 @@
                                 </td>
                             {% endif %}
                     {% endfor %}
+                    <td>{{ i[0].place.data }}</td>
                     <td>{{ i[0].v.data }}</td>
                     <td>{{ i[0].ts.data }}</td>
                     <td>{{ i[0].tr.data }}</td>

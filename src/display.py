@@ -14,10 +14,13 @@ class FencerForm(FlaskForm):
     opponent = IntegerField(widget=HiddenInput())
     main_fencer_name = StringField(widget=HiddenInput())
     score = StringField('Score')
+
     v = IntegerField(widget=HiddenInput())
     ts = IntegerField(widget=HiddenInput())
     tr = IntegerField(widget=HiddenInput())
     indicator = IntegerField(widget=HiddenInput())
+    place = IntegerField(widget=HiddenInput())
+
     is_different = BooleanField('is_repeat', widget=HiddenInput())
 
 class TournamentForm(FlaskForm):
@@ -32,7 +35,7 @@ def display(tourn_id=None):
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
     
-
+    places = {}
     for i in fencers:
         for j in fencers:
             score = tournament.scores.filter_by(main_fencer_id=i.id, opponent_id=j.id).first()
@@ -53,15 +56,23 @@ def display(tourn_id=None):
             fencer_form.tr = other[2]
             fencer_form.indicator = other[3]
 
+            places[other[3]] = i.id
+
             if i.id == j.id:
                 fencer_form.is_different = False
             tournament_form.fencers.append_entry(fencer_form)
+
+    #sort
+    places = dict(sorted(places.items()))
+    print(places)
+    for i in tournament_form.fencers:
+        i.place.data = list(places.keys()).index(i.indicator.data)+1
 
     chunks = []
     chunk_len = len(fencers)
     for i in range(0, len(tournament_form.fencers), chunk_len):
         chunks.append(tournament_form.fencers[i:i + chunk_len])
-    
+     
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
 
 @display_blueprint.route('/display/<int:tourn_id>', methods=['POST'])
@@ -108,5 +119,5 @@ def other_information(fencer_id):
         else:
             tr += int(i.score)
     indicator = ts - tr
-    print(fencer.name, victory_count, ts, tr, indicator)
+
     return (victory_count, ts, tr, indicator)
