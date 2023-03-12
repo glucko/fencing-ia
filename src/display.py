@@ -30,10 +30,16 @@ def display(tourn_id=None):
     pairs = []
     for i in fencers:
         for j in fencers:
+            score = tournament.scores.filter_by(main_fencer_id=i.id, opponent_id=j.id).first()
             fencer_form = FencerForm()
+
+            if score is not None:
+                fencer_form.score = score.score
+            else:
+                fencer_form.score = '0'
+
             fencer_form.main_fencer = i.id
             fencer_form.opponent = j.id
-            fencer_form.score = '0'
             fencer_form.main_fencer_name = i.name
 
             if i.id == j.id:
