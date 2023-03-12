@@ -28,12 +28,16 @@ def fencer_registration():
     fencer_form = FencerRegistration()
 
     if fencer_form.validate_on_submit():
-        fencer = Fencer(name=name, email=email, rating=rating)
+        fencer = Fencer(
+        name=fencer_form.name.data, 
+        email=fencer_form.email.data, 
+        rating=fencer_form.rating.data
+        )
         db.session.add(fencer)
         db.session.commit()
 
-        return redirect(url_for('forms.fencer_registration'))
         flash("Fencer registered successfully", "info")
+        return redirect(url_for('forms.fencer_registration'))
     return render_template('forms/fencer_registration.html', form=fencer_form)
 
 

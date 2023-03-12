@@ -1,9 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- navbar -->
+<div>
+    <h1> {{ tournament.title }} </h1>
+    <form action="" method="post" name="teamform">
+        {{ tournament_form.hidden_tag() }}
+        Team Title: {{ teamform.title }}<br>
+        <div>
+            <table>
+                {# column adn row names #}
+                {% for i in range(2) %}
+                    <tr>
+                        {% for fencer in tournament.fencers %}
+                            <th>{{ fencer.name }}</th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
 
-<h1> Welcome to my fencing ia project! </h1>
-
-
+                {% for i in range() %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.member_id }}</td>
+                    <td>{{ member.inbox_share }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p><input type="submit" name="edit" value="Send"></p>
+    </form>
+</div>
 {% endblock %}
