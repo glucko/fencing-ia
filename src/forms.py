@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, redirect, url_for, current_app, flash
+from flask import Blueprint, render_template, abort, redirect, url_for, current_app, flash, request
 from jinja2 import TemplateNotFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, RadioField
@@ -74,6 +74,9 @@ def manual_entry():
         return render_template('index.html')
     return render_template('forms/manual_entry.html', form=manual_form)
 
-@forms.route('/tournament_entry', methods=['GET'])
+@forms.route('/tournament_entry', methods=['GET', 'POST'])
 def tournament_entry():
-    return render_template('forms/tournament_entry.html')
+    if request.method == 'POST':
+        return render_template('index.html')
+    else:
+        return render_template('forms/tournament_entry.html')

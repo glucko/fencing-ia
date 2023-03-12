@@ -9,12 +9,20 @@ association_table = db.Table(
     db.Column("tournament_id", db.ForeignKey("tournament.id")),
     db.Column("fencer", db.ForeignKey("fencer.id")),
 )
-
+class Score(db.Model):
+    __tablename__ = "score"
+    id = db.Column(db.Integer, primary_key=True)
+    tournament_id = db.Column(db.Integer, db.ForeignKey("tournament.id"))
+    main_fencer_id = db.Column(db.Integer, db.ForeignKey("fencer.id"))
+    opponent_id = db.Column(db.Integer, db.ForeignKey("fencer.id"))
+    score = db.Column(db.String(10), nullable=True)
+    
 class Tournament(db.Model):
     __tablename__ = "tournament"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=True)
     date = db.Column(db.DateTime, default=datetime.utcnow,)
+    scores = db.relationship("Score", backref="tournament", lazy='dynamic')
     
 class Fencer(db.Model):
     __tablename__ = "fencer"
@@ -25,3 +33,5 @@ class Fencer(db.Model):
     tournaments = db.relationship(
         "Tournament", secondary=association_table, backref="fencers"
     )
+    def __repr__(self):
+        return f"Fencer('{self.name}', '{self.id}', '{self.rating}')"

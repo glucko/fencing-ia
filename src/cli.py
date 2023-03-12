@@ -20,7 +20,9 @@ def print_db():
         print("Tournament", tourn.id, tourn.name)
         for user in tourn.fencers:
             print("\t", user.id, user.name)
-    
+
+        for score in tourn.scores.all():
+            print("\t", Fencer.query.get(score.main_fencer_id), Fencer.query.get(score.opponent_id), score.score)
     for fencer in fencers:
         print("Fencer", fencer.id, fencer.name)
 
