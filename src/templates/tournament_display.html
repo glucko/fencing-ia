@@ -19,9 +19,9 @@
                     <th>{{ i[0].main_fencer_name }}</th>
                     {% for match in i %}
                             {% if not match.is_different %}
-                                <td>sussy!</td>   
+                                <td class="blank"></td>   
                             {% else %}
-                                <td>{{ match.score}}</td>
+                                <td>{{ match.score(class_="score_style")}}</td>
                             {% endif %}
                     {% endfor %}
                 </tr>
@@ -30,4 +30,14 @@
         <p><input type="submit" name="edit" value="Update"></p>
     </form>
 </div>
+
+<style>
+    .score_style {
+        width:25%;
+        background-color: rgb(225, 225, 225);
+    } 
+    .blank {
+        background-color: #e0e0e0;
+    }
+</style>
 {% endblock %}
