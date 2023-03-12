@@ -4,7 +4,6 @@ from wtforms import IntegerField, StringField, FieldList, FormField, BooleanFiel
 from wtforms.widgets import HiddenInput
 from wtforms.validators import DataRequired
 from models import Fencer, Tournament
-from pprint import PrettyPrinter
 
 
 display_blueprint = Blueprint('display', __name__,
@@ -30,10 +29,8 @@ def display(tourn_id=None):
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
     pairs = []
-    x = 0
     for i in fencers:
         for j in fencers:
-            x+= 1
             fencer_form = FencerForm()
             fencer_form.main_fencer = i.id
             fencer_form.opponent = j.id
@@ -49,7 +46,4 @@ def display(tourn_id=None):
     for i in range(0, len(pairs), chunk_len):
         chunks.append(tournament_form.fencers.data[i:i + chunk_len])
     
-    pp = PrettyPrinter(compact=True, sort_dicts=False)
-    pp.pprint(chunks)
-    print(len(chunks[0]))
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
