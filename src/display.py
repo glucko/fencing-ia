@@ -1,19 +1,19 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, FieldList, FormField, BooleanField
 from wtforms.widgets import HiddenInput
 from wtforms.validators import DataRequired
 from models import Fencer, Tournament
-
+from pprint import PrettyPrinter
 
 display_blueprint = Blueprint('display', __name__,
                         template_folder='templates')
-
+pp = PrettyPrinter()
 class FencerForm(FlaskForm):
     main_fencer = IntegerField(widget=HiddenInput())
     opponent = IntegerField(widget=HiddenInput())
     main_fencer_name = StringField(widget=HiddenInput())
-    score = StringField('Score', default="0")
+    score = StringField('Score')
     is_different = BooleanField('is_repeat', widget=HiddenInput())
 
 class TournamentForm(FlaskForm):
@@ -22,7 +22,6 @@ class TournamentForm(FlaskForm):
 
 @display_blueprint.route('/display/<int:tourn_id>', methods=['GET'])
 def display(tourn_id=None):
-    print(id)
     tournament = Tournament.query.get(tourn_id)
     fencers = tournament.fencers
 
@@ -34,6 +33,7 @@ def display(tourn_id=None):
             fencer_form = FencerForm()
             fencer_form.main_fencer = i.id
             fencer_form.opponent = j.id
+            fencer_form.score = '0'
             fencer_form.main_fencer_name = i.name
 
             if i.id == j.id:
@@ -44,6 +44,18 @@ def display(tourn_id=None):
     chunks = []
     chunk_len = len(fencers)
     for i in range(0, len(pairs), chunk_len):
-        chunks.append(tournament_form.fencers.data[i:i + chunk_len])
+        chunks.append(tournament_form.fencers[i:i + chunk_len])
     
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
+
+@display_blueprint.route('/display/<int:tourn_id>', methods=['POST'])
+def update(tourn_id=None):
+    #pp.pprint(request.form)
+
+    chunks = []
+    chunk_len = 3
+    temp = list(request.form.items())
+    for i in range(2, len(temp), chunk_len):
+        chunks.append(temp[i:i + chunk_len])
+    pp.pprint(chunks)
+    return "hello"

@@ -2,26 +2,30 @@
 
 {% block content %}
 <div>
-    <h1> {{ tournament_form.name }} </h1>
-    <form action="" method="post" name="teamform">
-    {{ tournament_form.hidden_tag() }}
+    <form action="" method="post" name="tournament_update">
+        {{ tournament_form.hidden_tag() }}
+        <h1> {{ tournament_form.name }} </h1>
         <table>
             {# column names #}
             <tr>
                 <th></th>
                 {% for chunk in chunks %}
-                    <th>{{ chunk[0].main_fencer_name }}</th>
+                    <th>{{ chunk[0].main_fencer_name.data }}</th>
                 {% endfor %}
             </tr>
 
             {% for i in chunks %}
                 <tr>
-                    <th>{{ i[0].main_fencer_name }}</th>
+                    <th>{{ i[0].main_fencer_name.data }}</th>
                     {% for match in i %}
-                            {% if not match.is_different %}
+                            {% if not match.is_different.data %}
                                 <td class="blank"></td>   
-                            {% else %}
-                                <td>{{ match.score(class_="score_style")}}</td>
+                            {% else %}       
+                                <td>
+                                    {{ match.main_fencer}}
+                                    {{ match.opponent }}
+                                    {{ match.score(class="score_style")}}
+                                </td>
                             {% endif %}
                     {% endfor %}
                 </tr>
