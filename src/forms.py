@@ -42,40 +42,6 @@ def fencer_registration():
         return redirect(url_for('forms.fencer_registration'))
     return render_template('forms/fencer_registration.html', form=fencer_form)
 
-
-class PhotoForm(FlaskForm):
-    image = FileField('Image', validators=[
-        # FileRequired(),
-        # FileAllowed(['jpg', 'png', 'pdf'], 'Images!')
-    ])
-
-@forms.route('/photo_entry', methods=['GET', 'POST'])
-def upload():
-    form = PhotoForm()
-
-    print(form.validate_on_submit())
-    if form.validate_on_submit():
-        f = form.image.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            current_app.root_path, 'photos', filename
-        ))
-        return render_template('index.html')
-
-    return render_template('forms/photo_entry.html', form=form)
-
-
-class ManualEntry(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-
-@forms.route('/manual_entry', methods=['GET', 'POST'])
-def manual_entry():
-    manual_form = ManualEntry()
-
-    if manual_form.validate_on_submit():
-        return render_template('index.html')
-    return render_template('forms/manual_entry.html', form=manual_form)
-
 @forms.route('/tournament_entry', methods=['GET'])
 def tournament_entry():
     return render_template('forms/tournament_entry.html')
