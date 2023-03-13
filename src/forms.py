@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, abort, redirect, url_for, current_app, flash, request
 from jinja2 import TemplateNotFound
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, RadioField, DateTimeLocalField, SelectMultipleField
+from wtforms import StringField, EmailField, RadioField, DateTimeLocalField
 from wtforms.widgets import ListWidget, CheckboxInput
-from wtforms_sqlalchemy.fields import QuerySelectMultipleField
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from wtforms.validators import DataRequired, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from werkzeug.utils import secure_filename
@@ -12,6 +12,27 @@ import os
 
 forms = Blueprint('forms', __name__,
                         template_folder='templates')
+
+########## Tournament Selection ##########
+
+class TournamentSelect(FlaskForm):
+    tournaments = QuerySelectField('Tournaments', query_factory=lambda :
+                            Tournament.query, get_label='name')
+
+@forms.route('/tournament_select', methods=['GET', 'POST'])
+def tournament_select():
+    tournament_form = TournamentSelect()
+    tournaments = Tournament.query.all()
+    tournament_form.tournaments.choices = [(t.id, t.name) for t in tournaments]
+
+    if request.method == 'POST':
+        if tournament_form.validate_on_submit():
+            tournament = tournament_form.tournaments.data
+            return redirect(url_for('display.display', tourn_id=tournament.id))
+    return render_template('forms/tournament_select.html', form=tournament_form)
+
+
+########## Fencer Registration ##########
 
 class FencerRegistration(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -42,9 +63,7 @@ def fencer_registration():
         return redirect(url_for('forms.fencer_registration'))
     return render_template('forms/fencer_registration.html', form=fencer_form)
 
-@forms.route('/tournament_entry', methods=['GET'])
-def tournament_entry():
-    return render_template('forms/tournament_entry.html')
+########## Tournament Registration/Creation ##########
 
 class MultiCheckboxField(QuerySelectMultipleField):
     widget = ListWidget(prefix_label=False)
@@ -60,6 +79,8 @@ class TournamentRegistration(FlaskForm):
     def validate_fencers(self, fencers):
         if len(fencers.data) < 2:
             raise ValidationError('Must have at least 2 fencers')
+
+########## Tournament Updating ##########
 
 @forms.route('/tournament_registration', methods=['GET', 'POST'])
 def tournament_registration():

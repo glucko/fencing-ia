@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" action="/tournament_select">
+    {{ form.hidden_tag() and form.csrf_token }}
+
+    {% for field in form %}
+        {% if field.type != 'CSRFTokenField'  %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <input type="submit">
+</form>
+{% endblock %}
