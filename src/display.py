@@ -63,7 +63,7 @@ def display(tourn_id=None):
             tournament_form.fencers.append_entry(fencer_form)
 
     #sort
-    places = dict(sorted(places.items()))
+    places = dict(sorted(places.items(), reverse=True))
     print(places)
     for i in tournament_form.fencers:
         i.place.data = list(places.keys()).index(i.indicator.data)+1
@@ -110,6 +110,7 @@ def other_information(fencer_id):
             victory_count += 1
         if 'L' in i.score or 'V' in i.score:
             ts += int(i.score[1:])
+            print(fencer.name, i.score[1:])
         else:
             ts += int(i.score)
 
