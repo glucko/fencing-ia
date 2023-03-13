@@ -2,7 +2,6 @@ import click
 from flask.cli import with_appcontext
 from models import Tournament, Fencer, db
 
-
 @click.command(name="createdb")
 @with_appcontext
 def create_db():
@@ -17,14 +16,14 @@ def print_db():
     fencers = Fencer.query.all()
 
     for tourn in tournament:
-        print("Tournament", tourn.id, tourn.name)
+        print(tourn)
         for user in tourn.fencers:
             print("\t", user.id, user.name)
 
         for score in tourn.scores.all():
             print("\t", Fencer.query.get(score.main_fencer_id), Fencer.query.get(score.opponent_id), score.score)
     for fencer in fencers:
-        print("Fencer", fencer.id, fencer.name)
+        print(fencer)
 
 @click.command(name="addfencer")
 @click.argument("name")

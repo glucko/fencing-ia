@@ -1,14 +1,11 @@
-from flask import Blueprint, render_template, abort, redirect, url_for, current_app, flash, request
+from flask import Blueprint, render_template, redirect, url_for, current_app, flash, request
 from jinja2 import TemplateNotFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, RadioField, DateTimeLocalField
 from wtforms.widgets import ListWidget, CheckboxInput
 from wtforms_sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from wtforms.validators import DataRequired, ValidationError
-from flask_wtf.file import FileField, FileRequired, FileAllowed
-from werkzeug.utils import secure_filename
 from models import Fencer, Tournament, db
-import os
 
 forms = Blueprint('forms', __name__,
                         template_folder='templates')

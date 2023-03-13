@@ -9,6 +9,9 @@ from pprint import PrettyPrinter
 display_blueprint = Blueprint('display', __name__,
                         template_folder='templates')
 pp = PrettyPrinter()
+
+########## Form Setup ##########
+
 class FencerForm(FlaskForm):
     main_fencer = IntegerField(widget=HiddenInput())
     opponent = IntegerField(widget=HiddenInput())
@@ -27,6 +30,8 @@ class TournamentForm(FlaskForm):
     name = StringField('name', widget=HiddenInput())
     fencers = FieldList(FormField(FencerForm))
 
+########## Display ##########
+
 @display_blueprint.route('/display/<int:tourn_id>', methods=['GET'])
 def display(tourn_id=None):
     tournament = Tournament.query.get(tourn_id)
@@ -34,8 +39,9 @@ def display(tourn_id=None):
 
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
-    
+
     places = {}
+    
     for i in fencers:
         for j in fencers:
             score = tournament.scores.filter_by(main_fencer_id=i.id, opponent_id=j.id).first()
@@ -62,12 +68,12 @@ def display(tourn_id=None):
                 fencer_form.is_different = False
             tournament_form.fencers.append_entry(fencer_form)
 
-    #sort
+    ### Sort by indicator to find place/ranking ###
     places = dict(sorted(places.items(), reverse=True))
-    print(places)
     for i in tournament_form.fencers:
         i.place.data = list(places.keys()).index(i.indicator.data)+1
 
+    ### Split into chunks for table rows and columns ###
     chunks = []
     chunk_len = len(fencers)
     for i in range(0, len(tournament_form.fencers), chunk_len):
@@ -75,10 +81,10 @@ def display(tourn_id=None):
      
     return render_template('tournament_display.html', tournament_form=tournament_form, chunks=chunks)
 
+########## Upload Updated Tournament from Website to Database ##########
+
 @display_blueprint.route('/display/<int:tourn_id>', methods=['POST'])
 def update(tourn_id=None):
-    #pp.pprint(request.form)
-
     chunks = []
     chunk_len = 3
     temp = list(request.form.items())
@@ -97,6 +103,9 @@ def update(tourn_id=None):
         db.session.commit()
     return redirect(url_for('display.display', tourn_id=tourn_id))
 
+
+########## Helper Functions ##########
+
 def other_information(fencer_id):
     fencer = Fencer.query.get(fencer_id)
     touches_scored = Score.query.filter_by(main_fencer_id=fencer_id).all()
@@ -110,7 +119,6 @@ def other_information(fencer_id):
             victory_count += 1
         if 'L' in i.score or 'V' in i.score:
             ts += int(i.score[1:])
-            print(fencer.name, i.score[1:])
         else:
             ts += int(i.score)
 
