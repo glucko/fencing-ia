@@ -5,6 +5,8 @@
     <form action="" method="post" name="tournament_update">
         {{ tournament_form.hidden_tag() }}
         <h1> {{ tournament_form.name }} </h1>
+        <h3> {{ tournament_form.time }} </h3>
+        <h3> {{ tournament_form.location }} </h3>
         <table>
             {# column names #}
             <tr>

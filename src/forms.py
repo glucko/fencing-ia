@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, redirect, url_for, current_app, flash, request
-from jinja2 import TemplateNotFound
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, RadioField, DateTimeLocalField
 from wtforms.widgets import ListWidget, CheckboxInput
@@ -77,7 +76,7 @@ class TournamentRegistration(FlaskForm):
         if len(fencers.data) < 2:
             raise ValidationError('Must have at least 2 fencers')
 
-########## Tournament Updating ##########
+########## Tournament Registration ##########
 
 @forms.route('/tournament_registration', methods=['GET', 'POST'])
 def tournament_registration():

@@ -28,6 +28,8 @@ class FencerForm(FlaskForm):
 
 class TournamentForm(FlaskForm):
     name = StringField('name', widget=HiddenInput())
+    time = StringField('time', widget=HiddenInput())
+    location = StringField('location', widget=HiddenInput())
     fencers = FieldList(FormField(FencerForm))
 
 ########## Display ##########
@@ -39,6 +41,8 @@ def display(tourn_id=None):
 
     tournament_form = TournamentForm()
     tournament_form.name = tournament.name
+    tournament_form.time = tournament.date.strftime("%m/%d/%Y, %H:%M:%S")
+    tournament_form.location = tournament.location
 
     places = {}
     

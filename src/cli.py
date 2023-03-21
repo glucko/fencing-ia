@@ -17,8 +17,8 @@ def print_db():
 
     for tourn in tournament:
         print(tourn)
-        for user in tourn.fencers:
-            print("\t", user.id, user.name)
+        for fencer in tourn.fencers:
+            print("\t", fencer)
 
         for score in tourn.scores.all():
             print("\t", Fencer.query.get(score.main_fencer_id), Fencer.query.get(score.opponent_id), score.score)
@@ -30,6 +30,7 @@ def print_db():
 @with_appcontext
 def add_fencer(name):
     fencer = Fencer(name=name)
+    print(type(fencer))
     db.session.add(fencer)
     db.session.commit()
     print("Fencer added")

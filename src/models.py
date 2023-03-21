@@ -24,7 +24,7 @@ class Score(db.Model):
 class Tournament(db.Model):
     __tablename__ = "tournament"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=True)
+    name = db.Column(db.String(80))
     date = db.Column(db.DateTime, default=datetime.utcnow,)
     location = db.Column(db.String(80), nullable=True)
     scores = db.relationship("Score", backref="tournament", lazy='dynamic')
