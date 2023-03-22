@@ -92,12 +92,14 @@ def update(tourn_id=None):
     chunks = []
     chunk_len = 3
     temp = list(request.form.items())
-    for i in range(2, len(temp)-1, chunk_len):
+    print(temp)
+    for i in range(4, len(temp)-1, chunk_len):
         chunks.append(temp[i:i + chunk_len])
     pp.pprint(chunks)
 
     tournament = Tournament.query.get(tourn_id)
     for i in chunks:
+        print(i)
         score = tournament.scores.filter_by(main_fencer_id=i[0][1], opponent_id=i[1][1]).first()
         if score is None:
             score = Score(tournament_id=tourn_id, main_fencer_id=i[0][1], opponent_id=i[1][1], score=i[2][1])
