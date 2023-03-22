@@ -60,7 +60,7 @@ def display(tourn_id=None):
             fencer_form.opponent = j.id
             fencer_form.main_fencer_name = i.name
 
-            other = other_information(i.id)
+            other = other_information(i.id, tournament.id)
             fencer_form.v = other[0]
             fencer_form.ts = other[1]
             fencer_form.tr = other[2]
@@ -92,7 +92,6 @@ def update(tourn_id=None):
     chunks = []
     chunk_len = 3
     temp = list(request.form.items())
-    print(temp)
     for i in range(4, len(temp)-1, chunk_len):
         chunks.append(temp[i:i + chunk_len])
     pp.pprint(chunks)
@@ -112,10 +111,10 @@ def update(tourn_id=None):
 
 ########## Helper Functions ##########
 
-def other_information(fencer_id):
+def other_information(fencer_id, tourn_id):
     fencer = Fencer.query.get(fencer_id)
-    touches_scored = Score.query.filter_by(main_fencer_id=fencer_id).all()
-    touches_received = Score.query.filter_by(opponent_id=fencer_id).all()
+    touches_scored = Score.query.filter_by(main_fencer_id=fencer_id, tournament_id=tourn_id).all()
+    touches_received = Score.query.filter_by(opponent_id=fencer_id, tournament_id=tourn_id).all()
     victory_count = 0
     ts = 0
     tr = 0
