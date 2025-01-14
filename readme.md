@@ -1,5 +1,4 @@
 # Fencing Internal Assessment
-A project for submission to the IB Diploma Programme.
 Deployed at [fencing-ia.onrender.com](https://fencing-ia.onrender.com/). May take a while for the hosting server to boot up.
 
 ## Instructions for running
